@@ -34,6 +34,8 @@ namespace EmployeeManagement.Infrastructure
 
         public DbSet<Session> Sessions => Set<Session>();
 
+        public DbSet<Employee> Employees => Set<Employee>();
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<AuditableEntity>())

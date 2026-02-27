@@ -11,6 +11,7 @@ namespace EmployeeManagement.Application
         DbSet<User> Users { get; }
         DbSet<Session> Sessions { get; }
         DbSet<UserRole> UserRoles { get; }
+        DbSet<Employee> Employees { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
