@@ -177,6 +177,30 @@
     "companies": "Companies",
     "select_companies": "Select Companies"
   },
+  "employees": {
+    "title": "Employees",
+    "full_name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "hire_date": "Hire Date",
+    "salary": "Salary",
+    "department": "Department",
+    "is_active": "Active",
+    "filter_by_department": "Filter by Department",
+    "all_departments": "All Departments",
+    "hr": "HR",
+    "it": "IT",
+    "finance": "Finance"
+  },
+  "employeeDialog": {
+    "full_name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "hire_date": "Hire Date",
+    "salary": "Salary",
+    "department": "Department",
+    "is_active": "Active"
+  },
   "map": {
     "title": "Map",
     "open_report": "Open report",

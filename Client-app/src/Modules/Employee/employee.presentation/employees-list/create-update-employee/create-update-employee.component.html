@@ -1,0 +1,150 @@
+<div class="flex flex-col gap-6">
+
+  <div class="flex gap-4">
+    <div class="flex-1">
+      <label for="fullName" class="block font-bold mb-3">
+        {{ "employeeDialog.full_name" | translate }}
+      </label>
+      <input
+        type="text"
+        pInputText
+        id="fullName"
+        [formControl]="fullName"
+        required
+        fluid
+        [ngClass]="{ 'ng-invalid': submitted && fullName.invalid }"
+      />
+      @if (submitted && fullName.invalid) {
+        <small class="text-red-500">{{ "General.required" | translate }}</small>
+      }
+      @if (fullName.errors?.['serverError']) {
+        @for (err of fullName.errors?.['serverError']; track $index) {
+          <p class="text-red-500">{{ err }}</p>
+        }
+      }
+    </div>
+
+    <div class="flex-1">
+      <label for="email" class="block font-bold mb-3">
+        {{ "employeeDialog.email" | translate }}
+      </label>
+      <input
+        type="email"
+        pInputText
+        id="email"
+        [formControl]="email"
+        required
+        fluid
+        [ngClass]="{ 'ng-invalid': submitted && email.invalid }"
+      />
+      @if (submitted && email.invalid) {
+        <small class="text-red-500">{{ "General.required" | translate }}</small>
+      }
+      @if (email.errors?.['serverError']) {
+        @for (err of email.errors?.['serverError']; track $index) {
+          <p class="text-red-500">{{ err }}</p>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="flex gap-4">
+    <div class="flex-1">
+      <label for="phone" class="block font-bold mb-3">
+        {{ "employeeDialog.phone" | translate }}
+      </label>
+      <input
+        type="tel"
+        pInputText
+        id="phone"
+        [formControl]="phone"
+        fluid
+      />
+    </div>
+
+    <div class="flex-1">
+      <label for="hireDate" class="block font-bold mb-3">
+        {{ "employeeDialog.hire_date" | translate }}
+      </label>
+      <p-datepicker
+        id="hireDate"
+        [formControl]="hireDate"
+        dateFormat="yy-mm-dd"
+        [showIcon]="true"
+        fluid
+        [ngClass]="{ 'ng-invalid': submitted && hireDate.invalid }"
+      />
+      @if (submitted && hireDate.invalid) {
+        <small class="text-red-500">{{ "General.required" | translate }}</small>
+      }
+    </div>
+  </div>
+
+  <div class="flex gap-4">
+    <div class="flex-1">
+      <label for="salary" class="block font-bold mb-3">
+        {{ "employeeDialog.salary" | translate }}
+      </label>
+      <p-inputnumber
+        id="salary"
+        [formControl]="salary"
+        [min]="0"
+        [minFractionDigits]="2"
+        fluid
+        [ngClass]="{ 'ng-invalid': submitted && salary.invalid }"
+      />
+      @if (submitted && salary.invalid) {
+        <small class="text-red-500">{{ "General.required" | translate }}</small>
+      }
+      @if (salary.errors?.['serverError']) {
+        @for (err of salary.errors?.['serverError']; track $index) {
+          <p class="text-red-500">{{ err }}</p>
+        }
+      }
+    </div>
+
+    <div class="flex-1">
+      <label for="department" class="block font-bold mb-3">
+        {{ "employeeDialog.department" | translate }}
+      </label>
+      <p-select
+        id="department"
+        [options]="departmentOptions"
+        [formControl]="department"
+        optionLabel="label"
+        optionValue="value"
+        fluid
+        [ngClass]="{ 'ng-invalid': submitted && department.invalid }"
+      />
+      @if (submitted && department.invalid) {
+        <small class="text-red-500">{{ "General.required" | translate }}</small>
+      }
+    </div>
+  </div>
+
+  @if (data) {
+    <div class="flex items-center gap-4">
+      <label for="isActive" class="font-bold">
+        {{ "employeeDialog.is_active" | translate }}
+      </label>
+      <p-toggleswitch id="isActive" [formControl]="isActive" />
+    </div>
+  }
+
+</div>
+
+<div class="flex gap-4 justify-end mt-4">
+  <p-button
+    label="{{ 'General.cancel' | translate }}"
+    icon="pi pi-times"
+    text
+    (click)="closeDialog()"
+  />
+  <p-button
+    label="{{ 'General.save' | translate }}"
+    icon="pi pi-check"
+    [loading]="loading"
+    (click)="submit()"
+    [disabled]="!form.dirty"
+  />
+</div>

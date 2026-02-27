@@ -14,51 +14,24 @@
           <span class="font-medium">{{ "SideNav.analytics" | translate }}</span>
         </a>
       </li>
-      <li>
-        <a [ngClass]="{ active: activeRoute() == 'map' }" routerLink="/map">
-          <i class="pi pi-map me-2"></i>
-          <span class="font-medium">{{ "SideNav.map" | translate }}</span>
-        </a>
-      </li>
       @if(authService.isEditor()) {
       <li>
         <a
-          pStyleClass="@next"
-          enterFromClass="hidden"
-          enterActiveClass="animate-slidedown"
-          leaveToClass="hidden"
-          leaveActiveClass="animate-slideup"
+          [ngClass]="{ active: activeRoute() == 'adminsList' }"
+          routerLink="/adminsList"
         >
           <i class="pi pi-users me-2"></i>
-          <span class="font-medium flex-1">{{
-            "accounts.title" | translate
-          }}</span>
-          <i class="pi pi-chevron-down"></i>
+          <span class="font-medium">{{ "accounts.admins" | translate }}</span>
         </a>
-        <ul
-          class="list-none py-0 pl-4 pr-0 m-0 hidden overflow-y-hidden transition-all duration-[400ms] ease-in-out"
+      </li>
+      <li>
+        <a
+          [ngClass]="{ active: activeRoute() == 'employees' }"
+          routerLink="/employees"
         >
-          <li>
-            <a
-              [ngClass]="{ active: activeRoute() == 'adminsList' }"
-              routerLink="/adminsList"
-            >
-              <span class="font-medium">{{
-                "accounts.admins" | translate
-              }}</span>
-            </a>
-          </li>
-          <li>
-            <a
-              [ngClass]="{ active: activeRoute() == 'usersList' }"
-              routerLink="/usersList"
-            >
-              <span class="font-medium">{{
-                "accounts.users" | translate
-              }}</span>
-            </a>
-          </li>
-        </ul>
+          <i class="pi pi-id-card me-2"></i>
+          <span class="font-medium">{{ "employees.title" | translate }}</span>
+        </a>
       </li>
       }
     </ul>

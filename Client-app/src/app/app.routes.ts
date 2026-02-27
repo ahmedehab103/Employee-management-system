@@ -24,11 +24,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'map',
-        loadComponent: () =>
-          import('./map/map.component').then((m) => m.MapComponent),
-      },
-      {
         path: 'adminsList',
         loadComponent: () =>
           import(
@@ -36,11 +31,11 @@ export const routes: Routes = [
           ).then((m) => m.AdminsListComponent),
       },
       {
-        path: 'usersList',
+        path: 'employees',
         loadComponent: () =>
           import(
-            './../Modules/Identity/identity.presentation/users-list/users-list.component'
-          ).then((m) => m.UsersListComponent),
+            './../Modules/Employee/employee.presentation/employees-list/employees-list.component'
+          ).then((m) => m.EmployeesListComponent),
       },
       {
         path: '403',

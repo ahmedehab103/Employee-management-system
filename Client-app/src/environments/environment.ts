@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
   apiUrl:
-    'https://claro-crm-testing-ayfmhkfrfgdbhdc5.centralus-01.azurewebsites.net/api',
-  imgUrl: 'https://images.claro.eg/',
-  clientUrl: 'https://claroeg.app',
+    'https://localhost:7274/api',
+  imgUrl: '',
+  clientUrl: 'http://localhost:4200/',
   googleJavascriptAPIKey: 'AIzaSyB5CWYi6m47ZnB0QpabHn_Xxr1b4LQ5TvE',
 };

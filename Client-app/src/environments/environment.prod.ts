@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.crm.claro.eg/api',
-  imgUrl: 'https://images.claro.eg/',
-  clientUrl: 'https://v2.claro.eg',
+  apiUrl:
+    'https://localhost:7274/api',
+  imgUrl: '',
+  clientUrl: 'http://localhost:4200/',
   googleJavascriptAPIKey: 'AIzaSyB5CWYi6m47ZnB0QpabHn_Xxr1b4LQ5TvE',
 };

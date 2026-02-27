@@ -177,6 +177,30 @@
     "companies": "الشركات",
     "select_companies": "اختر الشركات"
   },
+  "employees": {
+    "title": "الموظفون",
+    "full_name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "hire_date": "تاريخ التعيين",
+    "salary": "الراتب",
+    "department": "القسم",
+    "is_active": "نشط",
+    "filter_by_department": "تصفية حسب القسم",
+    "all_departments": "جميع الأقسام",
+    "hr": "الموارد البشرية",
+    "it": "تقنية المعلومات",
+    "finance": "المالية"
+  },
+  "employeeDialog": {
+    "full_name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "hire_date": "تاريخ التعيين",
+    "salary": "الراتب",
+    "department": "القسم",
+    "is_active": "نشط"
+  },
   "map": {
     "title": "الخريطة",
     "open_report": "فتح التقرير",
