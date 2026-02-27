@@ -1,0 +1,21 @@
+::ng-deep {
+  .p-drawer-content {
+    // width: 260px !important;
+    background-color: var(--primary-color);
+    padding: 1rem !important;
+  }
+
+  .p-drawer {
+    border: none !important;
+    width: 260px !important;
+  }
+
+  .p-drawer-header {
+    display: none !important;
+  }
+
+  html[dir="rtl"] .p-drawer {
+    left: unset !important;
+    right: 0 !important;
+  }
+}

@@ -1,0 +1,26 @@
+<header class="flex gap-2">
+  <p-button
+    (click)="openSideName()"
+    icon="pi pi-bars"
+    variant="outlined"
+    severity="secondary"
+    class="lg:hidden [&>button]:h-full [&>button]:w-14 [&>button]:bg-white"
+  />
+  <div
+    class="bg-white flex px-4 py-2 gap-2 items-center shadow-lg rounded-md flex-1"
+  >
+    <span class="pi pi-search"></span>
+    <input
+      type="text"
+      class="flex-1 outline-none bg-transparent"
+      placeholder="{{ 'Header.search' | translate }}"
+    />
+    <button (click)="changLang()">
+      <img
+        src="./../../assets/icons/language.svg"
+        alt="language"
+        class="w-10"
+      />
+    </button>
+  </div>
+</header>

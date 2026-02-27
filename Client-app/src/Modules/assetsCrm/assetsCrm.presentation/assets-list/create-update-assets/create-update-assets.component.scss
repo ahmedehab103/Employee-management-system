@@ -1,0 +1,17 @@
+::ng-deep {
+  .p-overlay.p-component {
+    top: 2.5rem !important;
+
+  }
+}
+
+
+
+.p-dropdown-panel {
+  width: auto !important;
+  /* Makes the dropdown size auto-adjust */
+  min-width: 100px;
+  /* Set a minimum width */
+  max-width: 100%;
+  /* Prevent it from exceeding the select size */
+}

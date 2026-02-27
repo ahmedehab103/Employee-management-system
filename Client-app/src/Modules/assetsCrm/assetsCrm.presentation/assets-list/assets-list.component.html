@@ -1,0 +1,541 @@
+<main class="flex flex-col gap-4">
+  <div
+    class="flex items-center justify-between flex-1 p-6 shadow-md rounded-lg bg-white text-[var(--primary-color)]"
+  >
+    <h1 class="text-3xl font-medium">
+      {{ "AssetsList.title" | translate }}
+    </h1>
+    @if(authService.isEditor()) {
+    <p-button
+      label="{{ 'Create_update_dialog.new' | translate }}"
+      icon="pi pi-plus"
+      class="mr-2"
+      (onClick)="create()"
+    />
+    }
+  </div>
+  <div class="table">
+    <p-toast />
+
+    <p-table
+      #dt
+      [value]="pagesData.data?.items ?? []"
+      dataKey="id"
+      [loading]="loading"
+      [tableStyle]="{ 'min-width': '20rem' }"
+      [expandedRowKeys]="expandedRows"
+      (onRowExpand)="onRowExpand($event)"
+      (onRowCollapse)="onRowCollapse($event)"
+      [columns]="columns()"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 flex-1">
+            <p-inputgroup class="flex relative !w-56">
+              <!-- <div class="flex items-center"> -->
+              <input
+                pInputText
+                placeholder="{{ 'General.search' | translate }}"
+                [(ngModel)]="searchQuery.data"
+              />
+              <p-button
+                icon="pi pi-times"
+                severity="secondary"
+                variant="text"
+                class="absolute pt-3 w-4 ltr:right-12 rtl:left-12 z-10 [&>button]:w-3 [&>button]:h-3"
+                (onClick)="table.clearFilter()"
+              ></p-button>
+              <!-- </div> -->
+              <p-inputgroup-addon>
+                <p-button
+                  icon="pi pi-search"
+                  severity="secondary"
+                  variant="text"
+                  (click)="table.onFilter()"
+                  class="z-10"
+                />
+              </p-inputgroup-addon>
+            </p-inputgroup>
+            <app-filter
+              class="flex-1"
+              (onFilter)="onFilter($event)"
+            ></app-filter>
+            <!-- <p-button
+              label="{{ 'AssetsList.show_on_map' | translate }}"
+              icon="pi pi-map"
+              (onClick)="showMap()"
+              class="min-w-max"
+            /> -->
+            @if(authService.isEditor()) {
+            <p-button
+              icon="pi pi-download"
+              label="{{ 'AssetsList.export' | translate }}"
+              (click)="dt.exportCSV()"
+            />
+            }
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 5rem"></th>
+          @for (column of columns(); track $index) {
+          <th class="flex-1">
+            {{ column.header }}
+          </th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-asset let-expanded="expanded">
+        <tr [pRowToggler]="asset" class="cursor-pointer">
+          <td>
+            <p-button
+              type="button"
+              pRipple
+              (onClick)="(!expanded)"
+              [text]="true"
+              [rounded]="true"
+              [plain]="true"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            />
+          </td>
+          <td>
+            {{ translate(asset.name) }}
+          </td>
+          <td>
+            {{ asset.project.translatedName }}
+          </td>
+          <td>
+            {{ asset.location.translatedName }}
+          </td>
+          <td>
+            {{
+              asset.currentValue?.value
+                | currency : " EGP " : "symbol" : "1.0-0"
+            }}
+          </td>
+          <td>
+            {{
+              asset.rentalValue?.value | currency : " EGP " : "symbol" : "1.0-0"
+            }}
+          </td>
+          <td>
+            {{
+              asset.currentValue.evaluatedAt == "0001-01-01T00:00:00+00:00"
+                ? "--"
+                : (asset.currentValue.evaluatedAt | date : "mediumDate")
+            }}
+          </td>
+          <td>
+            @if(authService.isEditor()) {
+            <p-toast />
+
+            <p-button
+              icon="pi pi-pencil"
+              rounded
+              severity="secondary"
+              variant="text"
+              (onClick)="update(asset)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              rounded
+              severity="danger"
+              variant="text"
+              (onClick)="delete(asset)"
+            />
+            }
+            <p-button
+              icon="pi pi-eye"
+              rounded
+              severity="secondary"
+              variant="text"
+              (onClick)="view(asset)"
+            />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #expandedrow let-asset>
+        <tr>
+          <td colspan="8">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-lg mb-4">
+                  {{ "AssetsList.values_for" | translate }}
+                  {{ translate(asset.name) }}
+                </h4>
+                @if(authService.isEditor()) {
+                <p-button
+                  label="{{ 'Create_update_dialog.new_value' | translate }}"
+                  icon="pi pi-plus"
+                  class="mr-2"
+                  (click)="isNewValue = true"
+                />
+                }
+              </div>
+              <p-table [value]="currentValues" dataKey="id" editMode="row">
+                <ng-template #header>
+                  <tr>
+                    <th pSortableColumn="value">
+                      {{ "AssetsList.value" | translate }}
+                      <p-sortIcon field="value" />
+                    </th>
+                    <th pSortableColumn="evaluatedAt">
+                      {{ "AssetsList.evaluated_at" | translate }}
+                      <p-sortIcon field="evaluatedAt" />
+                    </th>
+                    <th>
+                      {{ "AssetsList.statues" | translate }}
+                    </th>
+                    @if(authService.isEditor()) {
+                    <th>
+                      {{ "AssetsList.rental_value" | translate }}
+                    </th>
+                    }
+                    <th>
+                      {{ "AssetsList.report_type" | translate }}
+                    </th>
+                    <th>
+                      {{ "AssetsList.report" | translate }}
+                    </th>
+                    @if(authService.isEditor()) {
+                    <th style="width: 4rem">
+                      {{ "AssetsList.actions" | translate }}
+                    </th>
+                    }
+                  </tr>
+                </ng-template>
+
+                <ng-template
+                  #body
+                  let-value
+                  let-editing="editing"
+                  let-i="rowIndex"
+                  class="[&tr]:bg-red-400"
+                >
+                  @if(isNewValue) {
+                  <tr [pEditableRow]="newValue" id="newValue">
+                    <td>
+                      <p-inputnumber
+                        [(ngModel)]="newValue.value"
+                        placeholder="{{ 'AssetsList.enter_value' | translate }}"
+                      />
+                    </td>
+                    <td>{{ dateNow | date : "mediumDate" }}</td>
+
+                    <td>
+                      <p-select
+                        [options]="isFinalOptions()"
+                        [(ngModel)]="newValue.isFinal"
+                        class="w-full"
+                        placeholder="{{ 'General.choose' | translate }}"
+                      />
+                    </td>
+
+                    <td>
+                      <p-select
+                        [options]="isRentalOptions()"
+                        [(ngModel)]="newValue.isRental"
+                        class="w-full"
+                        placeholder="{{ 'General.choose' | translate }}"
+                      />
+                    </td>
+
+                    <td>
+                      <p-select
+                        [options]="isDetailedOptions()"
+                        [(ngModel)]="newValue.detailed"
+                        class="w-full"
+                        placeholder="{{ 'General.choose' | translate }}"
+                      />
+                    </td>
+                    <td>
+                      <div class="flex flex-col items-center">
+                        <p-button icon="pi pi-upload" (click)="file2.click()" />
+                        <input
+                          type="file"
+                          (change)="onSelectedFiles($event)"
+                          #file2
+                          hidden
+                          accept="file/*"
+                        />
+                        <span
+                          class="text-ellipsis whitespace-nowrap overflow-hidden w-20"
+                          >{{ uploadedReport?.name }}</span
+                        >
+                      </div>
+                    </td>
+                    <td>
+                      <div class="flex items-center justify-center gap-2">
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          pSaveEditableRow
+                          [icon]="
+                            valueLoading
+                              ? 'pi pi-spin pi-spinner'
+                              : 'pi pi-check'
+                          "
+                          (click)="saveNewValue(asset.id)"
+                          text
+                          rounded
+                          severity="secondary"
+                        ></button>
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          pCancelEditableRow
+                          icon="pi pi-times"
+                          (click)="cancelNewValue()"
+                          text
+                          rounded
+                          severity="secondary"
+                        ></button>
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          pCancelEditableRow
+                          icon="pi pi-trash"
+                          (click)="cancelNewValue()"
+                          text
+                          rounded
+                          severity="danger"
+                        ></button>
+                      </div>
+                    </td>
+                  </tr>
+                  }
+
+                  <tr [id]="isEmpty ? 'empty' : ''" [pEditableRow]="value">
+                    <td>
+                      <p-cellEditor>
+                        <ng-template #input>
+                          <p-inputnumber [(ngModel)]="value.value" />
+                        </ng-template>
+                        <ng-template #output>
+                          {{
+                            value.value
+                              | currency : " EGP " : "symbol" : "1.0-0"
+                          }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+
+                    <td>{{ dateNow | date : "mediumDate" }}</td>
+
+                    <td>
+                      <p-cellEditor>
+                        <ng-template #input>
+                          <p-select
+                            [options]="isFinalOptions()"
+                            [(ngModel)]="value.isFinal"
+                            class="w-full"
+                          />
+                        </ng-template>
+                        <ng-template #output>
+                          <p-tag
+                            [value]="value.isFinal ? final : draft"
+                            [severity]="getSeverity(value.isFinal)"
+                          />
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+
+                    @if(authService.isEditor()) {
+
+                    <td>
+                      <p-cellEditor>
+                        <ng-template #input>
+                          <p-select
+                            [options]="isRentalOptions()"
+                            [(ngModel)]="value.isRental"
+                            class="w-full"
+                          />
+                        </ng-template>
+                        <ng-template #output>
+                          <i
+                            class="pi"
+                            [ngClass]="{
+                              'text-green-500 pi-check-circle': value.isRental,
+                              'text-red-500 pi-times-circle': !value.isRental
+                            }"
+                          ></i>
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    }
+
+                    <td>
+                      <p-cellEditor>
+                        <ng-template #input>
+                          <p-select
+                            [options]="isDetailedOptions()"
+                            [(ngModel)]="value.detailed"
+                            class="w-full"
+                          />
+                        </ng-template>
+                        <ng-template #output>
+                          {{
+                            value.detailed
+                              ? ("AssetsList.detailed" | translate)
+                              : ("AssetsList.summary" | translate)
+                          }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <ng-template #input>
+                          <div class="flex flex-col items-center">
+                            <p-button
+                              icon="pi pi-upload"
+                              (click)="file.click()"
+                            />
+                            <input
+                              type="file"
+                              (change)="onSelectedFiles($event)"
+                              #file
+                              [(ngModel)]="value.reportUrl"
+                              hidden
+                              accept="file/*"
+                            />
+                            <span
+                              class="text-ellipsis whitespace-nowrap overflow-hidden w-20"
+                              >{{ uploadedReport?.name }}</span
+                            >
+                          </div>
+                        </ng-template>
+                        <ng-template #output>
+                          <a
+                            href="{{ imageUrlBase + value.reportUrl }}"
+                            target="_blank"
+                            severity="secondary"
+                          >
+                            <p-button
+                              type="link"
+                              icon="pi pi-external-link"
+                              label="{{ 'General.open' | translate }}"
+                              [link]="true"
+                              [disabled]="!value.reportUrl"
+                            />
+                          </a>
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    @if(authService.isEditor()) {
+                    <td>
+                      <div class="flex items-center justify-center gap-2">
+                        @if(updateLoading.i == i && updateLoading.loading) {
+                        <i class="pi pi-spin pi-spinner text-base ms-4"></i> }
+                        @if(!editing) {
+                        <button
+                          #editRow
+                          pButton
+                          pRipple
+                          type="button"
+                          pInitEditableRow
+                          icon="pi pi-pencil"
+                          (click)="startEditing(value, asset.id)"
+                          text
+                          rounded
+                          severity="secondary"
+                        ></button>
+                        <button
+                          #editRow
+                          pButton
+                          pRipple
+                          type="button"
+                          icon="pi pi-trash"
+                          (click)="deleteValue(value.id, asset.id)"
+                          text
+                          rounded
+                          severity="danger"
+                        ></button>
+                        } @else {
+
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          pSaveEditableRow
+                          [icon]="
+                            valueLoading
+                              ? 'pi pi-spin pi-spinner'
+                              : 'pi pi-check'
+                          "
+                          (click)="onRowEditSave(value, i)"
+                          text
+                          rounded
+                          severity="secondary"
+                        ></button>
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          pCancelEditableRow
+                          icon="pi pi-times"
+                          (click)="onRowEditCancel(value)"
+                          text
+                          rounded
+                          severity="secondary"
+                        ></button>
+                        }
+                        <button
+                          pButton
+                          pRipple
+                          type="button"
+                          icon="pi pi-verified"
+                          (click)="putCurrent(value, asset.id)"
+                          text
+                          rounded
+                          severity="secondary"
+                          pTooltip="{{ 'AssetsList.put_current' | translate }}"
+                          tooltipStyleClass="!text-xs"
+                          tooltipPosition="top"
+                        ></button>
+                        <i
+                          class="pi pi-star-fill w-6 h-6 text-green-700 bg-green-100 ms-2 !text-xs flex justify-center items-center rounded-full"
+                          [ngClass]="{
+                            visible: value.isCurrent,
+                            invisible: !value.isCurrent
+                          }"
+                          pTooltip="{{ 'AssetsList.current' | translate }}"
+                          tooltipPosition="top"
+                          tooltipStyleClass="!text-xs"
+                        ></i>
+                      </div>
+                    </td>
+                    }
+                  </tr>
+                </ng-template>
+
+                <ng-template #emptymessage>
+                  <tr>
+                    <td colspan="6">There are no values for this asset yet.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">No properties found.</td>
+        </tr>
+      </ng-template>
+      <p-toast />
+      <p-confirmdialog />
+    </p-table>
+    <p-paginator
+      (onPageChange)="table.onPageChange($event)"
+      [first]="table.pageIndex()"
+      [rows]="table.offset()"
+      [totalRecords]="pagesData.data?.pageInfo?.totalCount ?? 0"
+      [rowsPerPageOptions]="[20, 50, 100, 1000]"
+    />
+  </div>
+</main>

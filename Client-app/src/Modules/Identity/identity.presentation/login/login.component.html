@@ -1,0 +1,76 @@
+<main class="flex mx-auto">
+  <div class="relative flex justify-center w-full sm:w-fit m-auto my-auto">
+    <div class="login-form overflow-hidden w-full relative z-10">
+      <!-- <div class="flex">
+        <img class="w-44" src="assets/img/new-logo.svg" />
+      </div> -->
+
+      <div class="flex flex-col gap-1">
+        <h1 class="text-2xl font-medium">{{ "Login.title" | translate }}</h1>
+        <h2 class="text-[var(--secondary-color)]">
+          {{ "Login.description" | translate }}
+        </h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="login()" class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="email">{{ "Login.email" | translate }}</label>
+            <input
+              pInputText
+              id="email"
+              aria-describedby="email"
+              formControlName="email"
+            />
+          </div>
+
+          <div class="card flex flex-col gap-2 justify-center">
+            <label for="username">{{ "Login.password" | translate }}</label>
+            <p-password
+              id="password"
+              [toggleMask]="true"
+              placeholder="••••••••"
+              formControlName="password"
+            />
+          </div>
+          <div class="flex items-center">
+            <p-checkbox
+              inputId="rememberMe"
+              name="rememberMe"
+              formControlName="rememberMe"
+              [value]="true"
+            />
+            <label for="rememberMe" class="ms-2">
+              {{ "Login.rememberMe" | translate }}
+            </label>
+          </div>
+        </div>
+
+        <div class="text-center text-red-700 text-sm">
+          @if (errors.detail) {
+          <p>{{ errors.detail }}</p>
+          } @if (errors.key) {
+          <p>{{ errors.key | translate }}</p>
+          }
+        </div>
+
+        <p-button
+          label="{{ 'Login.submit' | translate }}"
+          class="w-full flex"
+          [loading]="loading"
+          type="submit"
+        />
+      </form>
+    </div>
+    <img
+      src="assets/imgs/login-vector1.svg"
+      alt="vector1"
+      class="vector1 max-sm:hidden"
+    />
+    <img
+      src="assets/imgs/login-vector2.svg"
+      alt="vector2"
+      class="vector2 max-sm:hidden"
+    />
+  </div>
+</main>

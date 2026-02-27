@@ -1,0 +1,159 @@
+<main class="table">
+  <p-table
+    #dt2
+    [value]="pagesData.data?.items ?? []"
+    dataKey="id"
+    [loading]="loading"
+    [tableStyle]="{ 'min-width': '20rem' }"
+    sortMode="single"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-medium">
+          {{ "projects.title" | translate }}
+        </h1>
+        <div class="flex items-center gap-2">
+          <p-inputgroup class="flex relative">
+            <input
+              pInputText
+              placeholder="{{ 'General.search' | translate }}"
+              [(ngModel)]="searchQuery.data"
+            />
+            <p-button
+              icon="pi pi-times"
+              severity="secondary"
+              variant="text"
+              class="absolute pt-3 w-4 ltr:right-12 rtl:left-12 z-10 [&>button]:w-3 [&>button]:h-3"
+              (onClick)="table.clearFilter()"
+            ></p-button>
+            <p-inputgroup-addon>
+              <p-button
+                icon="pi pi-search"
+                severity="secondary"
+                variant="text"
+                (click)="table.onFilter()"
+                class="z-10 flex-1"
+              />
+            </p-inputgroup-addon>
+          </p-inputgroup>
+          <p-multiselect
+            [options]="companies"
+            [(ngModel)]="selectedCompanies"
+            placeholder="{{ 'projects.all_companies' | translate }}"
+            optionLabel="translatedName"
+            optionValue="id"
+            display="chip"
+            class="max-w-[27rem] min-w-[27rem]"
+          >
+            <ng-template #dropdownicon>
+              <i class="pi pi-filter"></i>
+            </ng-template>
+            <ng-template #footer>
+              <div class="m-2 flex flex-col gap-2">
+                <hr />
+                <div class="flex gap-2">
+                  <p-button
+                    label="{{ 'General.filter' | translate }}"
+                    size="small"
+                    [loading]="loading"
+                    (onClick)="onFilterCompanies()"
+                    class="w-full [&>button]:!w-full"
+                  />
+                  <p-button
+                    label="{{ 'General.reset' | translate }}"
+                    size="small"
+                    severity="secondary"
+                    [loading]="loading"
+                    (onClick)="onClearFilterCompanies()"
+                    class="w-1/3 [&>button]:!w-full"
+                  />
+                </div>
+              </div>
+            </ng-template>
+          </p-multiselect>
+          @if(authService.isEditor()) {
+          <p-button
+            label="{{ 'Create_update_dialog.new' | translate }}"
+            icon="pi pi-plus"
+            class="mr-2"
+            (onClick)="create()"
+          />
+          }
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        @for (column of columns(); track $index) {
+        <th pSortableColumn="{{ column.field }}" class="">
+          {{ column.name }}
+        </th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          {{ item.name.ar }}
+        </td>
+        <td>
+          {{ item.name.en }}
+        </td>
+        <td>
+          <p-badge
+            [value]="removeDecimals(item.completionPercentage) + '%'"
+            [severity]="stockSeverity(item)"
+          />
+        </td>
+        <td>
+          {{ item.company.translatedName }}
+        </td>
+
+        <td>
+          {{ item.assetsValue | currency : " EGP " : "symbol" : "1.0-0" }}
+        </td>
+
+        <td>
+          {{ item.totalAssetRevenue | currency : " EGP " : "symbol" : "1.0-0" }}
+        </td>
+
+        <td>
+          {{ item.assetsNumber }}
+        </td>
+        @if(authService.isEditor()) {
+
+        <td>
+          <p-toast />
+          <p-button
+            icon="pi pi-pencil"
+            rounded
+            severity="secondary"
+            variant="text"
+            (onClick)="update(item)"
+          />
+          <p-button
+            icon="pi pi-trash"
+            rounded
+            severity="danger"
+            variant="text"
+            (onClick)="delete(item)"
+          />
+        </td>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">No properties found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-paginator
+    (onPageChange)="table.onPageChange($event)"
+    [first]="table.pageIndex()"
+    [rows]="table.offset()"
+    [totalRecords]="pagesData.data?.pageInfo?.totalCount ?? 0"
+    [rowsPerPageOptions]="[20, 50, 100]"
+  />
+  <p-confirmdialog />
+</main>

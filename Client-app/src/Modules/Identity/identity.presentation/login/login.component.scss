@@ -1,0 +1,32 @@
+.login-form {
+  @apply rounded shadow-lg bg-white p-8 flex flex-col gap-4 z-10 max-w-[28rem] w-[90%];
+}
+
+
+.vector1 {
+  position: absolute;
+  top: -60px;
+  inset-inline-start: -80px;
+}
+
+.vector2 {
+  position: absolute;
+  bottom: -60px;
+  inset-inline-end: -56px;
+}
+
+::ng-deep {
+  .p-inputwrapper {
+    display: flex !important;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  p-button {
+    button {
+      width: inherit !important;
+    }
+  }
+}

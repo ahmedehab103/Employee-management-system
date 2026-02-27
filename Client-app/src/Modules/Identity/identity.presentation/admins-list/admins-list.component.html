@@ -1,0 +1,102 @@
+<main class="card">
+  <p-table
+    #dt2
+    [value]="pagesData.data?.items ?? []"
+    dataKey="id"
+    [loading]="loading"
+    [tableStyle]="{ 'min-width': '20rem' }"
+    sortMode="single"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-medium">
+          {{ "accounts.admins" | translate }}
+        </h1>
+        <div class="flex items-center gap-2">
+          <p-inputgroup class="flex relative">
+            <input
+              pInputText
+              placeholder="{{ 'General.search' | translate }}"
+              [(ngModel)]="searchQuery.data"
+            />
+            <p-button
+              icon="pi pi-times"
+              severity="secondary"
+              variant="text"
+              class="absolute pt-3 w-4 ltr:right-12 rtl:left-12 z-10 [&>button]:w-3 [&>button]:h-3"
+              (onClick)="table.clearFilter()"
+            ></p-button>
+            <p-inputgroup-addon>
+              <p-button
+                icon="pi pi-search"
+                severity="secondary"
+                variant="text"
+                (click)="table.onFilter()"
+                class="z-10"
+              />
+            </p-inputgroup-addon>
+          </p-inputgroup>
+          <p-button
+            label="{{ 'Create_update_dialog.new' | translate }}"
+            icon="pi pi-plus"
+            class="mr-2"
+            (onClick)="create()"
+          />
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        @for (column of columns(); track $index) {
+        <th pSortableColumn="{{ column.field }}">
+          {{ column.name }}
+        </th>
+        }
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          {{ item.fullName?.firstName + " " + item.fullName?.lastName }}
+        </td>
+        <td>
+          <img
+            alt="user picture"
+            [src]="'./assets/icons/user.svg'"
+            class="shadow-lg w-12 h-12 rounded-full"
+          />
+        </td>
+
+        <td>
+          {{ item.email }}
+        </td>
+        <td>
+          {{ item.phoneNumber }}
+        </td>
+        <td>
+          <p-toast />
+          <p-button
+            icon="pi pi-pencil"
+            rounded
+            severity="secondary"
+            variant="text"
+            (onClick)="update(item)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">No properties found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-paginator
+    (onPageChange)="table.onPageChange($event)"
+    [first]="table.pageIndex()"
+    [rows]="table.offset()"
+    [totalRecords]="pagesData.data?.pageInfo?.totalCount ?? 0"
+    [rowsPerPageOptions]="[20, 50, 100]"
+  />
+  <p-confirmdialog />
+</main>

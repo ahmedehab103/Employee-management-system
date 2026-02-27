@@ -1,0 +1,68 @@
+<div class="grid grid-cols-2 gap-4 flex-1">
+  <p-multiselect
+    #companiesList
+    [options]="companies"
+    [(ngModel)]="selectedCompanies"
+    placeholder="{{ 'projects.all_companies' | translate }}"
+    optionLabel="translatedName"
+    optionValue="id"
+    display="chip"
+  >
+    <ng-template #dropdownicon>
+      <i class="pi pi-filter"></i>
+    </ng-template>
+    <ng-template #footer>
+      <div class="m-2 flex flex-col gap-2">
+        <hr />
+        <div class="flex gap-2">
+          <p-button
+            label="{{ 'General.filter' | translate }}"
+            size="small"
+            (onClick)="onFilterCompanies(companiesList)"
+            class="flex-1 [&>button]:!w-full"
+          />
+          <p-button
+            label="{{ 'General.reset' | translate }}"
+            size="small"
+            severity="secondary"
+            (onClick)="onClearCompanies(companiesList)"
+            class="w-1/3 min-w-max [&>button]:!w-full"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </p-multiselect>
+  <p-multiselect
+    #projectsList
+    [options]="previewedProjects"
+    [(ngModel)]="selectedProjects"
+    placeholder="{{ 'projects.all_projects' | translate }}"
+    optionLabel="translatedName"
+    optionValue="id"
+    display="chip"
+  >
+    <ng-template #dropdownicon>
+      <i class="pi pi-filter"></i>
+    </ng-template>
+    <ng-template #footer>
+      <div class="m-2 flex flex-col gap-2">
+        <hr />
+        <div class="flex gap-2">
+          <p-button
+            label="{{ 'General.filter' | translate }}"
+            size="small"
+            (onClick)="onFilterProjects(projectsList)"
+            class="flex-1 [&>button]:!w-full"
+          />
+          <p-button
+            label="{{ 'General.reset' | translate }}"
+            size="small"
+            severity="secondary"
+            (onClick)="selectedProjects = []; projectsList.hide()"
+            class="w-1/3 min-w-max [&>button]:!w-full"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </p-multiselect>
+</div>

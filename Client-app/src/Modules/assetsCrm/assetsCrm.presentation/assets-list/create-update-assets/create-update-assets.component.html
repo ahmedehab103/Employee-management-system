@@ -1,0 +1,220 @@
+<div class="flex flex-col gap-6">
+  <fieldset class="flex gap-4">
+    <div class="flex-1">
+      <label for="locationId" class="block font-bold mb-3">{{
+        "AssetsList.location" | translate
+      }}</label>
+      <p-select
+        [options]="locations"
+        appendTo="body"
+        id="locationId"
+        [formControl]="locationId"
+        optionLabel="translatedName"
+        placeholder="{{ 'AssetsList.location' | translate }}"
+        class="w-full"
+      />
+      @if (submitted && !locationId) {<small class="text-red-500"
+        >{{ "General.required" | translate }} </small
+      >} @if (locationId.errors?.['serverError']) { @for (err of
+      locationId.errors?.['serverError']; track $index) {
+      <p class="text-red-500">{{ err }}</p>
+      } }
+    </div>
+    <div class="flex-1">
+      <label for="projectId" class="block font-bold mb-3">{{
+        "AssetsList.project" | translate
+      }}</label>
+      <p-select
+        [options]="projects"
+        appendTo="body"
+        id="projectId"
+        [formControl]="projectId"
+        optionLabel="translatedName"
+        placeholder="{{ 'AssetsList.project' | translate }}"
+        class="w-full"
+      />
+      @if (submitted && !projectId) {<small class="text-red-500"
+        >{{ "General.required" | translate }} </small
+      >} @if (projectId.errors?.['serverError']) { @for (err of
+      projectId.errors?.['serverError']; track $index) {
+      <p class="text-red-500">{{ err }}</p>
+      } }
+    </div>
+  </fieldset>
+  <fieldset class="flex gap-4">
+    <div class="flex-1">
+      <label for="arName" class="block font-bold mb-3">{{
+        "AssetsList.ar_name" | translate
+      }}</label>
+      <input
+        type="text"
+        pInputText
+        id="arName"
+        required
+        fluid
+        [formControl]="arName"
+      />
+      @if (submitted && !arName) {
+      <small class="text-red-500">{{ "General.required" | translate }} </small>
+      } @if (arName.errors?.['serverError']) { @for (err of
+      arName.errors?.['serverError']; track $index) {
+      <p class="text-red-500">{{ err }}</p>
+      } }
+    </div>
+    <div class="flex-1">
+      <label for="enName" class="block font-bold mb-3">{{
+        "AssetsList.en_name" | translate
+      }}</label>
+      <input
+        type="text"
+        pInputText
+        id="enName"
+        required
+        fluid
+        [formControl]="enName"
+      />
+      @if (submitted && !enName) {<small class="text-red-500"
+        >{{ "General.required" | translate }} </small
+      >} @if (enName.errors?.['serverError']) { @for (err of
+      enName.errors?.['serverError']; track $index) {
+      <p class="text-red-500">{{ err }}</p>
+      } }
+    </div>
+  </fieldset>
+  <fieldset class="flex gap-4">
+    <div class="flex-1">
+      <label for="arDescription" class="block font-bold mb-3">{{
+        "AssetsList.ar_description" | translate
+      }}</label>
+      <textarea
+        id="arDescription"
+        pTextarea
+        required
+        rows="3"
+        cols="20"
+        fluid
+        [formControl]="arDescription"
+      ></textarea>
+      @if (submitted && !arDescription) {<small class="text-red-500"
+        >{{ "General.required" | translate }} </small
+      >} @if (arDescription.errors?.['serverError']) { @for (err of
+      arDescription.errors?.['serverError']; track $index) {
+      <p class="text-red-500">{{ err }}</p>
+      } }
+    </div>
+    <div class="flex-1">
+      <label for="enDescription" class="block font-bold mb-3">{{
+        "AssetsList.en_description" | translate
+      }}</label>
+      <textarea
+        id="enDescription"
+        pTextarea
+        required
+        rows="3"
+        cols="20"
+        fluid
+        [formControl]="enDescription"
+      ></textarea>
+      @if (submitted && !enDescription) {<small class="text-red-500"
+        >{{ "General.required" | translate }} </small
+      >} @if (enDescription.errors?.['serverError']) { @for (err of
+      enDescription.errors?.['serverError']; track $index) {
+      <p class="text-red-500">{{ err }}</p>
+      } }
+    </div>
+  </fieldset>
+  <fieldset>
+    <label for="longitude" class="block font-bold mb-3">{{
+      "AssetsList.location_on_map" | translate
+    }}</label>
+    <p-inputgroup class="w-full">
+      <input
+        type="number"
+        pInputText
+        [formControl]="latitude"
+        placeholder="{{ 'AssetsList.latitude' | translate }}"
+      />
+      <input
+        type="number"
+        pInputText
+        [formControl]="longitude"
+        placeholder="{{ 'AssetsList.longitude' | translate }}"
+      />
+      <p-inputgroup-addon>
+        <p-button
+          icon="pi pi-map"
+          severity="secondary"
+          variant="text"
+          (click)="op.toggle($event)"
+        />
+      </p-inputgroup-addon>
+    </p-inputgroup>
+
+    <p-popover #op>
+      <google-map [options]="options" (mapClick)="addMarker($event)">
+        @if (marker) {
+
+        <map-marker [position]="markerPosition" />
+        }
+      </google-map>
+    </p-popover>
+  </fieldset>
+
+  <div>
+    <label for="images" class="block font-bold mb-3">{{
+      "AssetsList.images" | translate
+    }}</label>
+    <p-button
+      label="{{ 'General.choose' | translate }}"
+      icon="pi pi-upload"
+      (click)="file.click()"
+    />
+    <input
+      type="file"
+      (change)="onSelectedFiles($event)"
+      #file
+      multiple
+      hidden
+      accept="image/*"
+    />
+
+    @if(imagesLoading) {
+    <i class="pi pi-spin pi-spinner text-base ms-4"></i> }
+
+    <ul class="my-4 flex gap-4 flex-wrap">
+      @if(uploadedImages) { @for (image of uploadedImages; track $index) {
+      <li class="w-28 h-28 relative">
+        <p-button
+          icon="pi pi-times"
+          [rounded]="true"
+          severity="danger"
+          (click)="removeImage($index)"
+          class="[&>button]:!w-6 [&>button]:!h-6 absolute top-0 right-0"
+        />
+        <img
+          src="{{ imageUrlBase + 'Picture/' + image }}"
+          class="shadow w-full h-28"
+          alt="{{ image.name }}"
+        />
+      </li>
+      } }
+    </ul>
+  </div>
+</div>
+
+<div class="flex gap-4 justify-end">
+  <p-button
+    label="{{ 'General.cancel' | translate }}"
+    icon="pi pi-times"
+    text
+    (click)="closeDialog()"
+  />
+  <p-button
+    label="{{
+      data ? ('General.update' | translate) : ('General.add' | translate)
+    }}"
+    icon="pi pi-check"
+    [loading]="loading"
+    (click)="submit()"
+  />
+</div>

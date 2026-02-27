@@ -1,0 +1,64 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "primeicons/primeicons.css";
+
+:root {
+  --primary-color: #25293C;
+  --bg-color: #F8F7FA;
+  --secondary-color: #2F2B3DB2;
+  --hover-color: #acafbd09;
+  --p-primary-color: #25293C !important;
+  --p-primary-hover-color: #25293cea !important;
+  --p-primary-active-color: #25293cdc !important;
+  --p-highlight-background: #0615501e !important;
+  --p-highlight-color: #25293C !important;
+  --p-button-text-primary-hover-background: #25293c0a !important;
+}
+
+
+.p-paginator {
+  justify-content: flex-end !important;
+  margin-top: 1rem
+}
+
+.table {
+  @apply flex-1 flex p-6 shadow-md rounded-lg bg-white flex-col text-[var(--primary-color)];
+}
+
+
+
+
+html body {
+  font-family: "Tajawal", sans-serif !important;
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+}
+
+.rtl-layout {
+  direction: rtl;
+  text-align: right;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

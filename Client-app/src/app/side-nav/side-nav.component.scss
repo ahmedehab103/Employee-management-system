@@ -1,0 +1,41 @@
+.active {
+  @apply bg-[#34374B] rounded-e-[50px];
+}
+
+li a {
+  @apply flex items-center cursor-pointer p-4 rounded-e-[50px] hover:bg-[var(--hover-color)] duration-150
+}
+
+/* Animation for Slide Down */
+@keyframes slidedown {
+  from {
+    transform: translateY(-30%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slidedown {
+  animation: slidedown 0.2s ease-out;
+}
+
+/* Animation for Slide Up */
+@keyframes slideup {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateY(-30%);
+    opacity: 0;
+  }
+}
+
+.animate-slideup {
+  animation: slideup 0.2s ease-out;
+}

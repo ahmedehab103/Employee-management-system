@@ -1,0 +1,24 @@
+@if (showLayout) {
+<div class="h-screen overflow-x-hidden">
+  <p-drawer
+    [visible]="!isMobile || drawerVisible"
+    (onHide)="drawerVisible = false"
+    [modal]="isMobile"
+  >
+    <app-side-nav class="flex h-full"></app-side-nav>
+  </p-drawer>
+  <main
+    class="pt-4 px-6 bg-[var(--bg-color)] h-full flex flex-col"
+    [ngClass]="{ 'ms-[260px]': !isMobile }"
+  >
+    <app-header (toggleDrawer)="toggleDrawer()"></app-header>
+    <div class="h-full mt-6 pb-4 min-h-fit">
+      <router-outlet class="" />
+    </div>
+  </main>
+</div>
+} @else {
+<div>
+  <app-login class="h-screen flex"></app-login>
+</div>
+}
