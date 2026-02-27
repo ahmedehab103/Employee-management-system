@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Department, Employee } from '../Employee.Domain/employee';
+import { Department, DepartmentOption, Employee } from '../Employee.Domain/employee';
 import { EmployeeImplementationRepository } from '../Employee.Infrastructure/repositories/employee-implementation-repository';
 import {
   PaginationParams,
@@ -7,6 +7,8 @@ import {
 } from '../../Common/domain/pagination';
 
 export abstract class EmployeeRepository {
+  abstract getDepartments(): Observable<DepartmentOption[]>;
+
   abstract getPage(
     params: PaginationParams,
     department?: Department

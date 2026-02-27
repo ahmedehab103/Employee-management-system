@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { EmployeeRepository } from '../../Employee.Application/employee.repository';
-import { Department, Employee } from '../../Employee.Domain/employee';
+import { Department, DepartmentOption, Employee } from '../../Employee.Domain/employee';
 import { environment } from '../../../../environments/environment';
 import {
   PaginationParams,
@@ -14,6 +14,12 @@ import { EmployeeDto, EmployeeMapper } from '../models/employee.model';
 export class EmployeeImplementationRepository implements EmployeeRepository {
   private readonly _httpClient = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/v1/AdminPanel/Employee`;
+
+  getDepartments(): Observable<DepartmentOption[]> {
+    return this._httpClient
+      .get(`${this.baseUrl}/GetDepartments`)
+      .pipe(map((data) => data as DepartmentOption[]));
+  }
 
   getPage(
     params: PaginationParams,

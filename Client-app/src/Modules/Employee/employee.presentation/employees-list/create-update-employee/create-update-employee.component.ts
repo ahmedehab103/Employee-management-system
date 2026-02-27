@@ -15,7 +15,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ToggleSwitch } from 'primeng/toggleswitch';
-import { Department, Employee } from '../../../Employee.Domain/employee';
+import { DepartmentOption, Employee } from '../../../Employee.Domain/employee';
 import {
   EmployeePostProviders,
   EmployeePostUseCase,
@@ -48,13 +48,9 @@ export class CreateUpdateEmployeeComponent implements OnInit {
   public loading = false;
   public submitted = false;
 
-  public data: Employee;
+  public data: Employee | null;
 
-  public readonly departmentOptions = [
-    { label: 'HR', value: Department.HR },
-    { label: 'IT', value: Department.IT },
-    { label: 'Finance', value: Department.Finance },
-  ];
+  public departmentOptions: { label: string; value: number }[] = [];
 
   private readonly config = inject(DynamicDialogConfig);
   private readonly ref = inject(DynamicDialogRef);
@@ -62,7 +58,14 @@ export class CreateUpdateEmployeeComponent implements OnInit {
   private readonly employeePutUseCase = inject(EmployeePutUseCase);
 
   constructor() {
-    this.data = this.config.data;
+    const dialogData: { employee: Employee | null; departments: DepartmentOption[] } =
+      this.config.data;
+
+    this.data = dialogData?.employee ?? null;
+    this.departmentOptions = (dialogData?.departments ?? []).map((d) => ({
+      label: d.name,
+      value: d.value,
+    }));
 
     this.form = new FormGroup({
       fullName: new FormControl(this.data?.fullName ?? '', [Validators.required]),

@@ -15,7 +15,7 @@ import { InputGroup } from 'primeng/inputgroup';
 import { PaginatorModule } from 'primeng/paginator';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TableComponent } from '../../../Common/presentation/tableComponent';
-import { Department, Employee } from '../../Employee.Domain/employee';
+import { Department, DepartmentOption, Employee } from '../../Employee.Domain/employee';
 import {
   EmployeeGetPageProviders,
   EmployeeGetPageUseCase,
@@ -24,6 +24,10 @@ import {
   EmployeeDeleteProviders,
   EmployeeDeleteUseCase,
 } from '../../Employee.Application/usecases/employee-delete.usecase';
+import {
+  EmployeeGetDepartmentsProviders,
+  EmployeeGetDepartmentsUseCase,
+} from '../../Employee.Application/usecases/employee-get-departments.usecase';
 import { CreateUpdateEmployeeComponent } from './create-update-employee/create-update-employee.component';
 
 @Component({
@@ -49,6 +53,7 @@ import { CreateUpdateEmployeeComponent } from './create-update-employee/create-u
   providers: [
     EmployeeGetPageProviders,
     EmployeeDeleteProviders,
+    EmployeeGetDepartmentsProviders,
     DialogService,
     MessageService,
     ConfirmationService,
@@ -61,8 +66,9 @@ export class EmployeesListComponent implements OnInit {
   private readonly confirmationService = inject(ConfirmationService);
   private readonly employeeGetPageUseCase = inject(EmployeeGetPageUseCase);
   private readonly employeeDeleteUseCase = inject(EmployeeDeleteUseCase);
+  private readonly employeeGetDepartmentsUseCase = inject(EmployeeGetDepartmentsUseCase);
 
-  public selectedDepartment: Department | null = null;
+  public selectedDepartment: number | null = null;
 
   public searchQuery: { data: string } = { data: '' };
 
@@ -94,12 +100,13 @@ export class EmployeesListComponent implements OnInit {
     this.pagesData
   );
 
-  public readonly departmentOptions = signal([
+  // Populated from API — starts with "All" option, then API results appended
+  public departmentOptions = signal<{ label: string; value: number | null }[]>([
     { label: this.translateService.instant('employees.all_departments'), value: null },
-    { label: this.translateService.instant('employees.hr'), value: Department.HR },
-    { label: this.translateService.instant('employees.it'), value: Department.IT },
-    { label: this.translateService.instant('employees.finance'), value: Department.Finance },
   ]);
+
+  // Populated from API for use in table display (value → name map)
+  public departments: DepartmentOption[] = [];
 
   public readonly columns = signal<any[]>([
     { name: this.translateService.instant('employees.full_name'), field: 'fullName' },
@@ -113,6 +120,14 @@ export class EmployeesListComponent implements OnInit {
   ]);
 
   ngOnInit() {
+    this.employeeGetDepartmentsUseCase.execute().subscribe((depts) => {
+      this.departments = depts;
+      this.departmentOptions.set([
+        { label: this.translateService.instant('employees.all_departments'), value: null },
+        ...depts.map((d) => ({ label: d.name, value: d.value })),
+      ]);
+    });
+
     this.getData(this.table.PaginationParams);
   }
 
@@ -120,20 +135,41 @@ export class EmployeesListComponent implements OnInit {
     this.getData(this.table.PaginationParams);
   }
 
-  create() {
-    this.table.openCreateUpdateDialog(CreateUpdateEmployeeComponent, () => {
-      this.getData(this.table.PaginationParams);
+  private openDialog(employee: Employee | null) {
+    const isCreate = !employee;
+    const headerKey = isCreate
+      ? 'Create_update_dialog.create_header'
+      : 'Create_update_dialog.update_header';
+    const successMsgKey = isCreate
+      ? 'Create_update_dialog.created_success_msg'
+      : 'Create_update_dialog.updated_success_msg';
+
+    const ref = this.dialogService.open(CreateUpdateEmployeeComponent, {
+      header: this.translateService.instant(headerKey),
+      width: '50%',
+      modal: true,
+      closable: true,
+      data: { employee, departments: this.departments },
+    });
+
+    ref.onClose.subscribe((response) => {
+      if (response?.confirmed) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: this.translateService.instant(successMsgKey),
+        });
+        this.getData(this.table.PaginationParams);
+      }
     });
   }
 
+  create() {
+    this.openDialog(null);
+  }
+
   update(employee: Employee) {
-    this.table.openCreateUpdateDialog(
-      CreateUpdateEmployeeComponent,
-      () => {
-        this.getData(this.table.PaginationParams);
-      },
-      employee
-    );
+    this.openDialog(employee);
   }
 
   delete(employee: Employee) {
@@ -167,12 +203,7 @@ export class EmployeesListComponent implements OnInit {
     });
   }
 
-  getDepartmentLabel(dept?: Department): string {
-    switch (dept) {
-      case Department.HR: return this.translateService.instant('employees.hr');
-      case Department.IT: return this.translateService.instant('employees.it');
-      case Department.Finance: return this.translateService.instant('employees.finance');
-      default: return '';
-    }
+  getDepartmentLabel(deptValue?: Department): string {
+    return this.departments.find((d) => d.value === deptValue)?.name ?? '';
   }
 }

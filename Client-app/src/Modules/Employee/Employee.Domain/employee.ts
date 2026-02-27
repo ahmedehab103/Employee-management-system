@@ -1,3 +1,8 @@
+export interface DepartmentOption {
+  value: number;
+  name: string;
+}
+
 export interface Employee {
   id?: number;
   fullName?: string;

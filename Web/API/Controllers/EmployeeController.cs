@@ -5,6 +5,8 @@ using EmployeeManagement.Application.Employees.Commands;
 using EmployeeManagement.Application.Employees.Models;
 using EmployeeManagement.Application.Employees.Queries;
 using EmployeeManagement.Domain;
+using EmployeeManagement.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -12,6 +14,16 @@ namespace API.Controllers
     [ApiVersion(1)]
     public class EmployeeController : ApiControllerBaseAdminPanel
     {
+        [HttpGet("[action]")]
+        [RoleAuthorize(Role.Admin)]
+        public ActionResult<IEnumerable<object>> GetDepartments()
+        {
+            var departments = Enum.GetValues<Department>()
+                .Select(d => new { value = (int)d, name = d.ToString() });
+
+            return Ok(departments);
+        }
+
         [HttpGet("[action]")]
         [RoleAuthorize(Role.Admin)]
         public Task<ActionResult<PaginatedList<EmployeeDto>>> GetPage(
