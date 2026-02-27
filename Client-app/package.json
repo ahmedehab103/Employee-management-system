@@ -1,5 +1,5 @@
 {
-  "name": "Claro-CRM-CMS",
+  "name": "client-app",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
@@ -27,7 +27,7 @@
     "@ngx-translate/http-loader": "^16.0.0",
     "@primeng/themes": "^19.0.0",
     "chart.js": "^4.4.7",
-    "Claro-CRM-CMS": "file:",
+    "client-app": "file:",
     "npm": "^11.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.0",

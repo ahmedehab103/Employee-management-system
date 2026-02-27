@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Claro-CRM-CMS": {
+    "client-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/Claro-CRM-CMS",
+              "base": "dist/client-app",
               "browser": ""
             },
             "index": "src/index.html",
@@ -74,10 +74,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Claro-CRM-CMS:build:production"
+              "buildTarget": "client-app:build:production"
             },
             "development": {
-              "buildTarget": "Claro-CRM-CMS:build:development"
+              "buildTarget": "client-app:build:development"
             }
           },
           "defaultConfiguration": "development"

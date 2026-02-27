@@ -1,4 +1,3 @@
-import { AssetsListComponent } from './../Modules/assetsCrm/assetsCrm.presentation/assets-list/assets-list.component';
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { NoAuthGuard } from './guards/non-auth.guard';
@@ -23,41 +22,6 @@ export const routes: Routes = [
           import('./analytics/analytics.component').then(
             (m) => m.AnalyticsComponent
           ),
-      },
-      {
-        path: 'assetsList',
-        loadComponent: () =>
-          import(
-            './../Modules/assetsCrm/assetsCrm.presentation/assets-list/assets-list.component'
-          ).then((m) => m.AssetsListComponent),
-      },
-      {
-        path: 'asset/:id',
-        loadComponent: () =>
-          import(
-            './../Modules/assetsCrm/assetsCrm.presentation/assets-list//view-assets/view-assets.component'
-          ).then((m) => m.ViewAssetsComponent),
-      },
-      {
-        path: 'companies',
-        loadComponent: () =>
-          import(
-            '../Modules/assetsCrm/assetsCrm.presentation/companies/companies.component'
-          ).then((m) => m.CompaniesComponent),
-      },
-      {
-        path: 'projects',
-        loadComponent: () =>
-          import(
-            '../Modules/assetsCrm/assetsCrm.presentation/projects/projects.component'
-          ).then((m) => m.ProjectsComponent),
-      },
-      {
-        path: 'locations',
-        loadComponent: () =>
-          import(
-            '../Modules/assetsCrm/assetsCrm.presentation/locations/locations.component'
-          ).then((m) => m.LocationsComponent),
       },
       {
         path: 'map',

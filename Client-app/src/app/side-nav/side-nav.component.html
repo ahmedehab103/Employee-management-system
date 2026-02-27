@@ -20,49 +20,7 @@
           <span class="font-medium">{{ "SideNav.map" | translate }}</span>
         </a>
       </li>
-      <li>
-        <a
-          [ngClass]="{ active: activeRoute() == 'assetsList' }"
-          routerLink="/assetsList"
-        >
-          <i class="pi pi-home me-2"></i>
-          <span class="font-medium">{{
-            "SideNav.assets_list" | translate
-          }}</span>
-        </a>
-      </li>
-      <!-- @if(authService.isEditor()) { -->
-      <li>
-        <a
-          [ngClass]="{ active: activeRoute() == 'companies' }"
-          routerLink="/companies"
-        >
-          <i class="pi pi-building-columns me-2"></i>
-          <span class="font-medium">{{ "SideNav.companies" | translate }}</span>
-        </a>
-      </li>
-      <!-- } -->
-      <li>
-        <a
-          [ngClass]="{ active: activeRoute() == 'projects' }"
-          routerLink="/projects"
-        >
-          <i class="pi pi-building me-2"></i>
-          <span class="font-medium">{{ "SideNav.projects" | translate }}</span>
-        </a>
-      </li>
-
       @if(authService.isEditor()) {
-
-      <li>
-        <a
-          [ngClass]="{ active: activeRoute() == 'locations' }"
-          routerLink="/locations"
-        >
-          <i class="pi pi-map-marker me-2"></i>
-          <span class="font-medium">{{ "SideNav.locations" | translate }}</span>
-        </a>
-      </li>
       <li>
         <a
           pStyleClass="@next"

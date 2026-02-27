@@ -1,6 +1,6 @@
 {
-  "name": "Claro-CRM-CMS",
-  "short_name": "Claro-CRM-CMS",
+  "name": "client-app",
+  "short_name": "client-app",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

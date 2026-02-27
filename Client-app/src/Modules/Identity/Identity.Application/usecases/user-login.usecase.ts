@@ -4,7 +4,6 @@ import { UseCase } from '../../../Common/application/use-case';
 import { UserRepository, userRepositoryProvider } from '../user.repository';
 import { AuthData, Role, User } from '../../Identity.Domain/user';
 import { AuthService } from '../auth-service';
-import { Company } from '../../../assetsCrm/assetsCrm.Domain/company';
 import {
   PaginationParams,
   PaginationRespons,

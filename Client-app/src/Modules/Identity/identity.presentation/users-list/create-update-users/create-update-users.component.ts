@@ -23,13 +23,6 @@ import {
 } from '../../../Identity.Application/usecases/userPut.usecase';
 import { Role, User } from '../../../Identity.Domain/user';
 import { ToggleSwitch } from 'primeng/toggleswitch';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { Company } from '../../../../assetsCrm/assetsCrm.Domain/company';
-import {
-  CompaniesGetLookUpProviders,
-  CompaniesGetLookUpUseCase,
-} from '../../../../assetsCrm/assetsCrm.Application/usecases/company/companiesGetLookUp.usecase';
-
 @Component({
   selector: 'app-create-update-users',
   templateUrl: './create-update-users.component.html',
@@ -44,17 +37,14 @@ import {
     SelectModule,
     CommonModule,
     ToggleSwitch,
-    MultiSelectModule,
   ],
-  providers: [UserPostProviders, UserPutProviders, CompaniesGetLookUpProviders],
+  providers: [UserPostProviders, UserPutProviders],
 })
 export class CreateUpdateUsersComponent implements OnInit {
   public form: FormGroup;
   public loading: boolean = false;
   public submitted: boolean = false;
   public imagePreview: string | ArrayBuffer | null | any;
-  public companies: Company[] = [];
-
   public data: User;
 
   public users: User[] = [];
@@ -63,10 +53,6 @@ export class CreateUpdateUsersComponent implements OnInit {
   private readonly config = inject(DynamicDialogConfig);
   private readonly userPutUseCase = inject(UserPutUseCase);
   private readonly userPostUseCase = inject(UserPostUseCase);
-  private readonly companiesGetLookUpUseCase = inject(
-    CompaniesGetLookUpUseCase
-  );
-
   constructor() {
     this.data = this.config.data;
     console.log(
@@ -99,9 +85,6 @@ export class CreateUpdateUsersComponent implements OnInit {
         disabled: this.data ? true : false,
       }),
       isChangePassword: new FormControl(false, [Validators.required]),
-      companiesIds: new FormControl(this.data?.companies ?? [], [
-        Validators.required,
-      ]),
     });
   }
 
@@ -133,17 +116,7 @@ export class CreateUpdateUsersComponent implements OnInit {
     return this.form.get('isChangePassword') as FormControl;
   }
 
-  get companiesIds(): FormControl {
-    return this.form.get('companiesIds') as FormControl;
-  }
-
   ngOnInit() {
-    this.companiesGetLookUpUseCase.execute().subscribe((data) => {
-      this.companies = data;
-      const x = this.filterByIds(this.companies, this.data?.companies!);
-      this.companiesIds.setValue(x);
-    });
-
     this.isChangePassword.valueChanges.subscribe((value) => {
       if (value) {
         this.password.enable();
@@ -155,11 +128,6 @@ export class CreateUpdateUsersComponent implements OnInit {
         this.confirmPassword.setValue(null);
       }
     });
-  }
-
-  filterByIds(objects: Company[], filterIds: any[]) {
-    const idsToFilter = filterIds?.map((item) => item.id);
-    return objects.filter((obj) => idsToFilter.includes(obj.id));
   }
 
   create(user: User, password: string, confirmPassword: string) {
@@ -211,7 +179,6 @@ export class CreateUpdateUsersComponent implements OnInit {
       email: this.email?.value,
       phoneNumber: this.phoneNumber?.value,
       role: Role.User,
-      companies: this.companiesIds.value,
     };
     const password = this.password?.value;
     const confirmPassword = this.confirmPassword?.value;
