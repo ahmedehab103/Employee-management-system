@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(find:*)",
+      "Bash(dotnet build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(dotnet restore:*)",
+      "Bash(dotnet list:*)",
+      "Bash(dotnet run:*)",
+      "Bash(curl:*)",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_evaluate",
+      "Bash(dotnet:*)",
+      "Bash(pwsh:*)",
+      "Bash(./playwright.ps1 install chromium)",
+      "Bash(powershell.exe -File playwright.ps1 install chromium)",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "Bash(powershell -Command \"Remove-Item -Path ''C:\\\\Users\\\\ahmed\\\\Documents\\\\GitHub\\\\Test\\\\Claro-CRM\\\\Claro-CRM\\\\ClaroCRM.sln'' -Force\")",
+      "Bash(powershell.exe -NoProfile:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "playwright"
+  ]
+}
